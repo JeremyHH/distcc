@@ -112,7 +112,11 @@ void be_a_dnsslave(struct rslave_s *rslave)
         memset(&result, 0, sizeof(result));
         result.id = req.id;
         result.err = h_errno;
-        if (h && (h->h_length == sizeof(result.addr))) {
+     
+        if (h == NULL && result.err == 0) {
+            result.err = HOST_NOT_FOUND;
+        }
+        else if (h && (h->h_length == sizeof(result.addr))) {
             memcpy(result.addr, h->h_addr_list[0], (unsigned) h->h_length);
             result.err = 0;
         }
